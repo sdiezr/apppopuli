@@ -42,7 +42,7 @@ export default {
     icons: [
       { nombre: 'AYUDA', icono: 'mdi-help', ruta: '/perro' },
       { nombre: 'INICIO', icono: 'mdi-home', ruta: '/' },
-      { nombre: 'EXPLORAR', icono: 'mdi-map', ruta: '/perro' }
+      { nombre: 'EXPLORAR', icono: 'mdi-map-marker', ruta: '/perro' }
     ]
   })
 }
@@ -51,7 +51,7 @@ export default {
 <style>
 
   #app {
-    font-family: Helvetica;
+    font-family: Helvetica, sans-serif;
   }
   
   .texto_iconos {
