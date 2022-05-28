@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div id="informe">
 
     <div class="icono_usuario">
       <v-icon
@@ -14,7 +14,7 @@
     </div>
 
     <div class="formulario">
-      <v-container fluid style="max-width: fit-content;">
+      <v-container fluid style="max-width: fit-content">
         <v-form>
           <v-select
             label="Plaga/Enfermedad"
@@ -86,20 +86,15 @@
             </template>
             
             <v-card>
-              <v-card-title />
-              <v-divider />
-              <br>
-
               <v-spacer />
               <v-card-text>
-                <div style="height: 300px">
+                <div style="padding-top: 10px; height: 400px">
                   <LocalizacionMapa v-model="location" />
                 </div>
               </v-card-text>
               <v-divider />
 
               <v-card-actions class="justify-center">
-
                 <v-btn class="white--text"
                   width="50%"
                   height="50"
@@ -110,6 +105,89 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+
+          <v-select
+            label="Total de árboles dañados"
+            color="#178649"
+            suffix="árbol/es"
+            :items="extension">
+            <v-tooltip top slot="append-outer">
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  v-on="on"
+                  size="20"
+                  color="#178649">
+                  mdi-help
+                </v-icon>
+              </template>
+              <span>si me disculpa</span>
+            </v-tooltip>
+          </v-select>
+
+          <v-text-field
+            v-model="porcentajeExtension"
+            label="Porcentaje de pies afectados"
+            color="#178649"
+            suffix="%"
+            :rules="[rules.porcentajeExtension]">
+            <v-tooltip top slot="append-outer">
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  v-on="on"
+                  size="20"
+                  color="#178649">
+                  mdi-help
+                </v-icon>
+              </template>
+              <span>si me disculpa</span>
+            </v-tooltip>
+          </v-text-field>
+
+          <v-select
+            v-model="severidadDefault"
+            label="Severidad del daño"
+            color="#178649"
+            suffix="% de la copa o el tronco dañado"
+            :items="severidad">
+            <v-tooltip top slot="append-outer">
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  v-on="on"
+                  size="20"
+                  color="#178649">
+                  mdi-help
+                </v-icon>
+              </template>
+              <span>si me disculpa</span>
+            </v-tooltip>
+          </v-select>
+          
+          <v-textarea
+            color="#178649">
+            <template v-slot:label>
+              <div>
+                Observaciones
+              </div>
+            </template>
+          </v-textarea>
+
+          <v-text-field
+            v-model="contacto"
+            label="Teléfono o correo electrónico"
+            color="#178649"
+            :rules="[rules.contacto]">
+            <v-tooltip top slot="append-outer">
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  v-on="on"
+                  size="20"
+                  color="#178649">
+                  mdi-help
+                </v-icon>
+              </template>
+              <span>si me disculpa</span>
+            </v-tooltip>
+          </v-text-field>
           
           <v-divider />
 
@@ -125,7 +203,7 @@
       </v-container>
     </div>
 
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -152,6 +230,29 @@ export default {
     // campo localizacion
     dialog: false,
     location: {},
+
+    // campo extension del daño
+    extension: [
+      '1',
+      '2-10',
+      '10-100',
+      'Más de 100'
+    ],
+    porcentajeExtension: '',
+    rules: {
+      porcentajeExtension: value => {
+        const pattern = /^[1-9][0-9]?$|^100$/
+        return pattern.test(value) || 'Introduce un valor numérico entre 1 y 100'
+      }
+    },
+
+    // campo severidad del daño
+    severidad: [
+      '0-25',
+      '25-75',
+      'Más del 75'
+    ],
+    severidadDefault: '0-25'
   }),
 
   watch: {
