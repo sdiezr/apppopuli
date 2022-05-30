@@ -16,7 +16,8 @@
             centered
             fixed-tabs
             dark
-            icons-and-text>    
+            icons-and-text
+            optional>
             <v-tab
               v-for="icon in icons"
               :key="icon"
@@ -39,16 +40,18 @@
 </template>
 
 <script>
-export default {
-  data: () => ({
-    activeTab: 1,
-    icons: [
-      { nombre: 'AYUDA', icono: 'mdi-help', ruta: '/perro' },
-      { nombre: 'INICIO', icono: 'mdi-home', ruta: '/' },
-      { nombre: 'EXPLORAR', icono: 'mdi-map-marker', ruta: '/perro' }
-    ]
-  })
-}
+
+  export default {
+    data: () => ({
+      activeTab: 1,
+      icons: [
+        { nombre: 'AYUDA', icono: 'mdi-help', ruta: '/ayuda' },
+        { nombre: 'INICIO', icono: 'mdi-home', ruta: '/' },
+        { nombre: 'EXPLORAR', icono: 'mdi-map-marker', ruta: '/explorar' }
+      ]
+    })
+  }
+
 </script>
 
 <style>

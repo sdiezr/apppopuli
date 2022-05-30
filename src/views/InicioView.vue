@@ -9,12 +9,12 @@
       </v-icon>
     </div>
 
-    <div class="logotipo">
+    <div class="titulo">
       <img src="../assets/logo.png"
         width="180" height="144" />
     </div>
 
-    <div class="botones">
+    <div class="cuerpo">
       <v-btn class="white--text"
         width="275"
         height="50"
@@ -42,19 +42,24 @@
 
 <style>
 
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
+
   .icono_usuario {
     text-align: left;
     padding-top: 10px;
     padding-left: 10px
   }
 
-  .logotipo {
-    text-align: center
+  .titulo {
+    text-align: center;
+    padding-bottom: 25px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 40px;
+    color: #178649
   }
 
-  .botones {
-    text-align: center;
-    margin-top: 35px
+  .cuerpo {
+    text-align: center
   }
 
 </style>

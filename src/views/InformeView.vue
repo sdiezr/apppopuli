@@ -13,24 +13,13 @@
       Informe
     </div>
 
-    <div class="formulario">
+    <div class="cuerpo">
       <v-container fluid style="max-width: fit-content">
         <v-form>
           <v-select
             label="Plaga/Enfermedad"
             color="#178649"
             :items="plagas">
-            <v-tooltip top slot="append-outer">
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  v-on="on"
-                  size="20"
-                  color="#178649">
-                  mdi-help
-                </v-icon>
-              </template>
-              <span>si me disculpa</span>
-            </v-tooltip>
           </v-select>
 
           <v-menu
@@ -88,8 +77,8 @@
             <v-card>
               <v-spacer />
               <v-card-text>
-                <div style="padding-top: 10px; height: 400px">
-                  <LocalizacionMapa v-model="location" />
+                <div style="padding-top: 10px; margin-bottom: -10px; height: 400px">
+                  <InformeMapa v-model="location" />
                 </div>
               </v-card-text>
               <v-divider />
@@ -163,11 +152,10 @@
           </v-select>
           
           <v-textarea
-            color="#178649">
+            color="#178649"
+            auto-grow>
             <template v-slot:label>
-              <div>
-                Observaciones
-              </div>
+              Observaciones
             </template>
           </v-textarea>
 
@@ -207,105 +195,87 @@
 </template>
 
 <script>
-import LocalizacionMapa from "../components/LocalizacionMapa"
 
-export default {
-  components: {
-    LocalizacionMapa
-  },
+  import InformeMapa from "../components/InformeMapa"
 
-  data: vm => ({
-    // campo plaga/enfermedad
-    plagas: [
-      'Chrysomela populi',
-      'Cossus cossus',
-      'Saperda populnea'
-    ],
+  export default {
+    components: {
+      InformeMapa
+    },
 
-    // campo fecha
-    date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-    dateFormatted: vm.formatDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
-    menuDate: false,
-    
-    // campo localizacion
-    dialog: false,
-    location: {},
+    data: vm => ({
+      // campo plaga/enfermedad
+      plagas: [
+        'Chrysomela populi',
+        'Cossus cossus',
+        'Saperda populnea'
+      ],
 
-    // campo extension del daño
-    extension: [
-      '1',
-      '2-10',
-      '10-100',
-      'Más de 100'
-    ],
-    porcentajeExtension: '',
-    rules: {
-      porcentajeExtension: value => {
-        const pattern = /^[1-9][0-9]?$|^100$/
-        return pattern.test(value) || 'Introduce un valor numérico entre 1 y 100'
+      // campo fecha
+      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      dateFormatted: vm.formatDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
+      menuDate: false,
+      
+      // campo localizacion
+      dialog: false,
+      location: {},
+
+      // campo extension del daño
+      extension: [
+        '1',
+        '2-10',
+        '10-100',
+        'Más de 100'
+      ],
+      porcentajeExtension: '',
+      rules: {
+        porcentajeExtension: value => {
+          const pattern = /^[1-9][0-9]?$|^100$/
+          return pattern.test(value) || 'Introduce un valor numérico entre 1 y 100'
+        }
+      },
+
+      // campo severidad del daño
+      severidad: [
+        '0-25',
+        '25-75',
+        'Más del 75'
+      ],
+      severidadDefault: '0-25'
+    }),
+
+    watch: {
+      /* cuando se abre el dialogo del campo localizacion
+      redimensiona la ventana para que el mapa se ajuste
+      al tamaño del cuadro de dialogo y se muestre correctamente */
+      dialog (visible) {
+        if (visible) {
+          setTimeout(() => {
+            window.dispatchEvent(new Event("resize"));
+          }, 100);
+        }
       }
     },
 
-    // campo severidad del daño
-    severidad: [
-      '0-25',
-      '25-75',
-      'Más del 75'
-    ],
-    severidadDefault: '0-25'
-  }),
+    computed: {
+      computedDateFormatted () {
+        return this.formatDate(this.date)
+      }
+    },
 
-  watch: {
-    /* cuando se abre el dialogo del campo localizacion
-    redimensiona la ventana para que el mapa se ajuste
-    al tamaño del cuadro de dialogo y se muestre correctamente */
-    dialog (visible) {
-      if (visible) {
-        setTimeout(() => {
-          window.dispatchEvent(new Event("resize"));
-        }, 100);
+    methods: {
+      formatDate (date) {
+        if (!date) return null
+
+        const [year, month, day] = date.split('-')
+        return `${day}/${month}/${year}`
       }
     }
-  },
-
-  computed: {
-    computedDateFormatted () {
-      return this.formatDate(this.date)
-    }
-  },
-
-  methods: {
-    formatDate (date) {
-      if (!date) return null
-
-      const [year, month, day] = date.split('-')
-      return `${day}/${month}/${year}`
-    }
   }
-}
+
 </script>
 
 <style>
-
-  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
-
-  .icono_usuario {
-    text-align: left;
-    padding-top: 10px;
-    padding-left: 10px
-  }
-
-  .titulo {
-    text-align: center;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 40px;
-    color: #178649
-  }
-
-  .formulario {
-    text-align: center;
-    margin-top: 25px
-  }
 
   .direccion {
     font-size: 10px;
