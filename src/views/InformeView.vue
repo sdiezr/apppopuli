@@ -14,9 +14,10 @@
     </div>
 
     <div class="cuerpo">
-      <v-container fluid style="max-width: fit-content">
+      <v-container fluid style="width: 95%; max-width: 500px">
         <v-form>
           <v-select
+            v-model="informe.patogeno"
             label="Plaga/Enfermedad"
             color="#178649"
             :items="plagas">
@@ -50,7 +51,7 @@
 
           <v-dialog
             v-model="dialog"
-            width="500">
+            width="800">
             <template
               v-if="!location.position"
               v-slot:activator="{ on, attrs }">
@@ -75,17 +76,16 @@
             </template>
             
             <v-card>
-              <v-spacer />
-              <v-card-text>
-                <div style="padding-top: 10px; margin-bottom: -10px; height: 400px">
-                  <InformeMapa v-model="location" />
-                </div>
-              </v-card-text>
+              <div style="height: 400px">
+                <InformeMapa v-model="location" />
+              </div>
               <v-divider />
 
               <v-card-actions class="justify-center">
-                <v-btn class="white--text"
-                  width="50%"
+                <v-btn
+                  dark
+                  width="100%"
+                  max-width="500px"
                   height="50"
                   color="#ff5d55"
                   @click="dialog = false">
@@ -96,6 +96,7 @@
           </v-dialog>
 
           <v-select
+            v-model="informe.extension_arboles"
             label="Total de árboles dañados"
             color="#178649"
             suffix="árbol/es"
@@ -114,11 +115,11 @@
           </v-select>
 
           <v-text-field
-            v-model="porcentajeExtension"
+            v-model="informe.extension_pies"
             label="Porcentaje de pies afectados"
             color="#178649"
             suffix="%"
-            :rules="[rules.porcentajeExtension]">
+            :rules="[rules.reglaExtension]">
             <v-tooltip top slot="append-outer">
               <template v-slot:activator="{ on }">
                 <v-icon
@@ -133,11 +134,11 @@
           </v-text-field>
 
           <v-select
-            v-model="severidadDefault"
+            v-model="informe.severidad"
             label="Severidad del daño"
             color="#178649"
-            suffix="% de la copa o el tronco dañado"
-            :items="severidad">
+            suffix="%"
+            :items="severidadOpciones">
             <v-tooltip top slot="append-outer">
               <template v-slot:activator="{ on }">
                 <v-icon
@@ -152,6 +153,7 @@
           </v-select>
           
           <v-textarea
+            v-model="informe.observaciones"
             color="#178649"
             auto-grow>
             <template v-slot:label>
@@ -160,10 +162,9 @@
           </v-textarea>
 
           <v-text-field
-            v-model="contacto"
+            v-model="informe.contacto"
             label="Teléfono o correo electrónico"
-            color="#178649"
-            :rules="[rules.contacto]">
+            color="#178649">
             <v-tooltip top slot="append-outer">
               <template v-slot:activator="{ on }">
                 <v-icon
@@ -182,9 +183,10 @@
           <br>
 
           <v-btn class="white--text"
-            width="275"
+            width="100%"
             height="50"
-            color="#ff5d55">
+            color="#ff5d55"
+            @click="saveInforme">
             enviar
           </v-btn>
         </v-form>
@@ -197,6 +199,7 @@
 <script>
 
   import InformeMapa from "../components/InformeMapa"
+  import InformeDataService from "../services/InformeDataService"
 
   export default {
     components: {
@@ -204,6 +207,16 @@
     },
 
     data: vm => ({
+      informe: {
+        id: null,
+        patogeno: "",
+        extension_arboles: "",
+        extension_pies: "",
+        severidad: "",
+        observaciones: "",
+        contacto: ""
+      },
+
       // campo plaga/enfermedad
       plagas: [
         'Chrysomela populi',
@@ -227,21 +240,19 @@
         '10-100',
         'Más de 100'
       ],
-      porcentajeExtension: '',
       rules: {
-        porcentajeExtension: value => {
+        reglaExtension: value => {
           const pattern = /^[1-9][0-9]?$|^100$/
           return pattern.test(value) || 'Introduce un valor numérico entre 1 y 100'
         }
       },
 
       // campo severidad del daño
-      severidad: [
+      severidadOpciones: [
         '0-25',
         '25-75',
         'Más del 75'
-      ],
-      severidadDefault: '0-25'
+      ]
     }),
 
     watch: {
@@ -258,17 +269,39 @@
     },
 
     computed: {
-      computedDateFormatted () {
+      computedDateFormatted() {
         return this.formatDate(this.date)
       }
     },
 
     methods: {
-      formatDate (date) {
+      formatDate(date) {
         if (!date) return null
 
         const [year, month, day] = date.split('-')
         return `${day}/${month}/${year}`
+      },
+
+      saveInforme() {
+        var data = {
+          patogeno: this.informe.patogeno,
+          fecha: this.date,
+          localizacion: this.location.address,
+          extension_arboles: this.informe.extension_arboles,
+          extension_pies: this.informe.extension_pies,
+          severidad: this.informe.severidad,
+          observaciones: this.informe.observaciones,
+          contacto: this.informe.contacto
+        };
+        
+        InformeDataService.create(data)
+          .then((response) => {
+            this.informe.id = response.data.id;
+            console.log(response.data);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       }
     }
   }

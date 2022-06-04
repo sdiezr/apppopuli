@@ -16,7 +16,7 @@
     <div style="padding-bottom: 15px">
       <v-card class="mx-auto"
         width="98%"
-        max-width="1000">
+        max-width="800">
         <v-tabs
           v-model="tabModel"
           background-color="#178649"
@@ -43,7 +43,8 @@
     </div>
 
     <v-dialog
-        v-model="dialog">
+        v-model="dialog"
+        width="800">
         <template
             v-slot:activator="{ on, attrs }">
             <v-btn class="boton_flotante"
@@ -59,11 +60,22 @@
             </v-btn>
         </template>
         <v-card flat>
-            <div style="height: 400px">
-                <InformeMapa />
-            </div>
+          <v-btn
+            fab
+            dark
+            fixed
+            top
+            right
+            small
+            color="#ff5d55"
+            @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <div style="height: 400px">
+            <InformeMapa />
+          </div>
         </v-card>
-    </v-dialog>    
+    </v-dialog>
     
     <v-btn class="boton_flotante"
       fab

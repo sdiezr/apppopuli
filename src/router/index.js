@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import InicioView from '../views/InicioView.vue'
 import InformeView from '../views/InformeView.vue'
+import GraciasView from '../views/GraciasView.vue'
+import LoginView from '../views/LoginView.vue'
 import AyudaView from '../views/AyudaView.vue'
 import ExplorarView from '../views/ExplorarView.vue'
 
@@ -19,6 +21,16 @@ const routes = [
     component: InformeView
   },
   {
+    path: '/gracias',
+    name: 'gracias',
+    component: GraciasView
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView
+  },
+  {
     path: '/ayuda',
     name: 'ayuda',
     component: AyudaView
@@ -31,8 +43,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+  mode: "history",
   routes
 })
 

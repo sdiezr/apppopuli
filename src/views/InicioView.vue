@@ -15,26 +15,31 @@
     </div>
 
     <div class="cuerpo">
-      <v-btn class="white--text"
-        width="275"
-        height="50"
-        color="#ff5d55"
-        to="/informe">
-        enviar informe
-      </v-btn>
+      <v-container fluid style="width: 95%; max-width: 500px">
+        <v-btn
+          dark
+          width="100%"
+          height="50"
+          color="#ff5d55"
+          to="/informe">
+          enviar informe
+        </v-btn>
 
-      <br><br>
+        <br><br>
 
-      <v-divider />
+        <v-divider />
 
-      <br>
+        <br>
 
-      <v-btn class="white--text"
-        width="275"
-        height="50"
-        color="#178649">
-        iniciar sesión
-      </v-btn>
+        <v-btn
+          dark
+          width="100%"
+          height="50"
+          color="#178649"
+          to="/login">
+          iniciar sesión
+        </v-btn>
+      </v-container>
     </div>
 
   </v-app>
