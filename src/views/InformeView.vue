@@ -20,7 +20,15 @@
             v-model="informe.patogeno"
             label="Plaga/Enfermedad"
             color="#178649"
-            :items="plagas">
+            :items="patogenos"
+            item-value="nombre_cientifico"
+            item-text="nombre_cientifico">
+            <template v-slot:item="{item}">
+              <i>{{ item.nombre_cientifico }}</i> &nbsp; ({{ item.nombre_vulgar }})
+            </template>
+            <template v-slot:selection="{item}">
+              <i>{{ item.nombre_cientifico }}</i> &nbsp; ({{ item.nombre_vulgar }})
+            </template>
           </v-select>
 
           <v-menu
@@ -200,6 +208,7 @@
 
   import InformeMapa from "../components/InformeMapa"
   import InformeDataService from "../services/InformeDataService"
+  import PatogenoDataService from "../services/PatogenoDataService.js"
 
   export default {
     components: {
@@ -218,11 +227,7 @@
       },
 
       // campo plaga/enfermedad
-      plagas: [
-        'Chrysomela populi',
-        'Cossus cossus',
-        'Saperda populnea'
-      ],
+      patogenos: [],
 
       // campo fecha
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
@@ -275,6 +280,24 @@
     },
 
     methods: {
+      mostrarPatogenos() {
+        PatogenoDataService.getAll()
+          .then((response) => {
+            this.patogenos = response.data.map(this.getMostrarPatogeno);
+            console.log(response.data);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      },
+
+      getMostrarPatogeno(patogeno) {
+        return {
+          nombre_cientifico: patogeno.nombre_cientifico,
+          nombre_vulgar: patogeno.nombre_vulgar
+        };
+      },
+
       formatDate(date) {
         if (!date) return null
 
@@ -303,6 +326,10 @@
             console.log(e);
           });
       }
+    },
+
+    mounted() {
+      this.mostrarPatogenos();
     }
   }
 
