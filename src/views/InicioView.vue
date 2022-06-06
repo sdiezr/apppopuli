@@ -16,7 +16,7 @@
 
     <div class="cuerpo">
       <v-container fluid style="width: 95%; max-width: 500px">
-        <v-btn
+        <v-btn style="text-decoration: none"
           dark
           width="100%"
           height="50"
@@ -31,7 +31,7 @@
 
         <br>
 
-        <v-btn
+        <v-btn style="text-decoration: none"
           dark
           width="100%"
           height="50"

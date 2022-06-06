@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content>
+    <v-main>
       <v-footer
         app
         fixed
@@ -18,7 +18,7 @@
             dark
             icons-and-text
             optional>
-            <v-tab
+            <v-tab style="text-decoration: none"
               v-for="icon in icons"
               :key="icon"
               :to="icon.ruta">
@@ -35,7 +35,7 @@
       </v-footer>
 
       <router-view></router-view>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

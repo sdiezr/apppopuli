@@ -30,7 +30,11 @@
               <i>{{ item.nombre_cientifico }}</i> &nbsp; ({{ item.nombre_vulgar }})
             </template>
           </v-select>
+        </v-form>
 
+        <upload-files />
+
+        <v-form>
           <v-menu
             v-model="menuDate"
             :close-on-content-click="false"
@@ -185,7 +189,7 @@
               <span>si me disculpa</span>
             </v-tooltip>
           </v-text-field>
-          
+
           <v-divider />
 
           <br>
@@ -207,15 +211,20 @@
 <script>
 
   import InformeMapa from "../components/InformeMapa"
+  import UploadFiles from "../components/UploadFiles"
   import InformeDataService from "../services/InformeDataService"
   import PatogenoDataService from "../services/PatogenoDataService.js"
 
   export default {
     components: {
-      InformeMapa
+      InformeMapa,
+      UploadFiles
     },
 
     data: vm => ({
+
+      selectedFile: null,
+
       informe: {
         id: null,
         patogeno: "",

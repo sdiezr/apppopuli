@@ -44,7 +44,10 @@ const routes = [
 
 const router = new VueRouter({
   mode: "history",
-  routes
+  routes,
+  scrollBehavior() {
+    document.getElementById('app').scrollIntoView({ behavior: 'smooth' });
+  }
 })
 
 export default router
