@@ -94,7 +94,8 @@
                             width="100%"
                             max-width="500px"
                             height="50"
-                            color="#ff5d55">
+                            color="#ff5d55"
+                            @click="download(patogeno.id)">
                             descargar ficha en formato pdf
                           </v-btn>
                         </div>
@@ -126,6 +127,7 @@
 <script>
 
   import PatogenoDataService from "../services/PatogenoDataService.js"
+  import FileService from "../services/FileService"
 
   export default {
     data: () => ({
@@ -135,7 +137,7 @@
         'PLAGAS Y ENFERMEDADES'
       ],
 
-      patogenos: []
+      patogenos: [],
     }),
 
     methods: {
@@ -152,6 +154,7 @@
 
       getMostrarPatogeno(patogeno) {
         return {
+          id: patogeno.id,
           nombre_cientifico: patogeno.nombre_cientifico,
           nombre_vulgar: patogeno.nombre_vulgar,
           parrafo_quien: patogeno.parrafo_quien,
@@ -160,6 +163,23 @@
           parrafo_cuando: patogeno.parrafo_cuando,
           parrafo_confundir: patogeno.parrafo_confundir
         };
+      },
+
+      download(file) {
+        FileService.download(file)
+          .then((response) => {
+            var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+            var fileLink = document.createElement('a');
+
+            fileLink.href = fileURL;
+            fileLink.setAttribute('download', `${file}.pdf`);
+            document.body.appendChild(fileLink);
+
+            fileLink.click();
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       }
 
     },

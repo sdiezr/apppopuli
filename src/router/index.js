@@ -4,6 +4,7 @@ import InicioView from '../views/InicioView.vue'
 import InformeView from '../views/InformeView.vue'
 import GraciasView from '../views/GraciasView.vue'
 import LoginView from '../views/LoginView.vue'
+import RegisterView from '../views/RegisterView.vue'
 import AyudaView from '../views/AyudaView.vue'
 import ExplorarView from '../views/ExplorarView.vue'
 
@@ -31,6 +32,11 @@ const routes = [
     component: LoginView
   },
   {
+    path: '/register',
+    name: 'register',
+    component: RegisterView
+  },
+  {
     path: '/ayuda',
     name: 'ayuda',
     component: AyudaView
@@ -43,7 +49,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: "history",
+  // mode: "history",
   routes,
   scrollBehavior() {
     document.getElementById('app').scrollIntoView({ behavior: 'smooth' });

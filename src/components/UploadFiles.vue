@@ -21,7 +21,7 @@
 
 
     <label class="boton_examinar btn">
-        <v-icon color="#178649" size="17">mdi-camera</v-icon>
+        <v-icon color="#178649" size=17>mdi-camera</v-icon>
         SELECCIONAR ARCHIVOS
         <input style="display: none" type="file" multiple @change="selectFile">
     </label>
@@ -46,7 +46,7 @@
 
 <script>
 
-    import UploadService from "../services/UploadFilesService";
+    import FileService from "../services/FileService";
 
     export default {
     name: "upload-files",
@@ -60,22 +60,22 @@
         };
     },
     methods: {
-        selectFile(event) {
+      selectFile(event) {
         this.progressInfos = [];
         this.selectedFiles = event.target.files;
-        },
+      },
 
-        upload(idx, file) {
+      upload(idx, file) {
         this.progressInfos[idx] = { percentage: 0, fileName: file.name };
 
-        UploadService.upload(file, (event) => {
-            this.progressInfos[idx].percentage = Math.round(100 * event.loaded / event.total);
+        FileService.upload(file, (event) => {
+        this.progressInfos[idx].percentage = Math.round(100 * event.loaded / event.total);
         })
             .then((response) => {
             let prevMessage = this.message ? this.message + "\n" : "";
             this.message = prevMessage + response.data.message;
 
-            return UploadService.getFiles();
+            return FileService.getFiles();
             })
             .then((files) => {
             this.fileInfos = files.data;
@@ -84,18 +84,18 @@
             this.progressInfos[idx].percentage = 0;
             this.message = "El archivo no se ha podido enviar correctamente: " + file.name;
             });
-        },
+      },
 
-        uploadFiles() {
+      uploadFiles() {
         this.message = "";
 
         for (let i = 0; i < this.selectedFiles.length; i++) {
             this.upload(i, this.selectedFiles[i]);
         }
-        }
+      }
     },
     mounted() {
-        UploadService.getFiles().then((response) => {
+        FileService.getFiles().then((response) => {
         this.fileInfos = response.data;
         });
     }

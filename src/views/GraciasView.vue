@@ -18,21 +18,22 @@
         width="90%"
         max-width="800"
         elevation="0">
-        Tu informe se ha enviado <b>correctamente</b>.
+        Tu informe se ha enviado correctamente.
         <br><br>
-        <b>¡Ayúdanos a mejorar!</b>
-        Queremos saber tu <b>opinión</b> 
-        sobre nuestra <b>aplicacón</b>. 
-        Rellenar este <a style="color: #178649" href="url">formulario</a> 
-        solo te llevará unos <b>minutos</b>.
+        ¡Ayúdanos a mejorar!
+        Queremos saber tu opinión
+        sobre nuestra aplicacón. 
+        Rellenar este <a style="font-weight: bold; color: #ff5d55; text-decoration: none" href="url">formulario</a> 
+        solo te llevará unos minutos.
       </v-card>
 
       <br><br>
 
       <v-btn class="white--text"
+        style="text-decoration: none"
         width="275"
         height="50"
-        color="#ff5d55"
+        color="#178649"
         to="/">
         no, gracias
       </v-btn>

@@ -25,11 +25,7 @@
           enviar informe
         </v-btn>
 
-        <br><br>
-
         <v-divider />
-
-        <br>
 
         <v-btn style="text-decoration: none"
           dark

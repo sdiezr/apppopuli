@@ -10,7 +10,7 @@
     </div>
 
     <div class="titulo">
-      Iniciar sesión
+      Registrarse
     </div>
 
     <div class="cuerpo">
@@ -45,19 +45,9 @@
             color="#178649"
             :disabled="!valid"
             @click="validar">
-            iniciar sesión
+            registrarse
           </v-btn>
         </v-form>
-
-        <br>
-
-        <div class="registro">
-          ¿No tienes cuenta?
-          <router-link to="/register" style="font-weight: bold; color: #ff5d55; text-decoration: none">
-            Regístrate
-          </router-link>
-        </div>
-
       </v-container>
     </div>
 
@@ -92,10 +82,6 @@
   .direccion {
     font-size: 10px;
     color: #178649
-  }
-
-  .registro {
-    color: #686868
   }
 
 </style>

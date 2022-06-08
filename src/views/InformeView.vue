@@ -15,6 +15,13 @@
 
     <div class="cuerpo">
       <v-container fluid style="width: 95%; max-width: 500px">
+        <div class="asterisco">
+          Los campos acompañados de un asterisco (*) son
+          <lab style="color: #ff5d55">obligatorios</lab>
+        </div>
+
+        <br>
+        
         <v-form>
           <v-select
             v-model="informe.patogeno"
@@ -34,7 +41,10 @@
 
         <upload-files />
 
-        <v-form>
+        <v-form
+          v-model="valid"
+          ref="form">
+
           <v-menu
             v-model="menuDate"
             :close-on-content-click="false"
@@ -45,7 +55,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="computedDateFormatted"
-                label="Fecha"
+                label="Fecha (*)"
                 color="#178649"
                 hint="DD/MM/AA"
                 readonly
@@ -64,23 +74,14 @@
           <v-dialog
             v-model="dialog"
             width="800">
-            <template
-              v-if="!location.position"
-              v-slot:activator="{ on, attrs }">
-              <v-text-field
-                label="Localización"
-                color="#178649"
-                readonly
-                v-bind="attrs"
-                v-on="on"/>
-            </template>
 
             <template
-              v-else
               v-slot:activator="{ on, attrs }">
               <v-text-field
+                required
+                :rules="reglaObligatorio"
                 :value="location.address"
-                label="Localización"
+                label="Localización (*)"
                 color="#178649"
                 readonly
                 v-bind="attrs"
@@ -88,10 +89,20 @@
             </template>
             
             <v-card>
+            <v-btn
+              fab
+              dark
+              fixed
+              top
+              right
+              x-small
+              color="#ff5d55"
+              @click="dialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
               <div style="height: 400px">
                 <InformeMapa v-model="location" />
               </div>
-              <v-divider />
 
               <v-card-actions class="justify-center">
                 <v-btn
@@ -109,7 +120,9 @@
 
           <v-select
             v-model="informe.extension_arboles"
-            label="Total de árboles dañados"
+            required
+            :rules="reglaObligatorio"
+            label="Total de árboles dañados (*)"
             color="#178649"
             suffix="árbol/es"
             :items="extension">
@@ -128,10 +141,11 @@
 
           <v-text-field
             v-model="informe.extension_pies"
-            label="Porcentaje de pies afectados"
+            required
+            label="Porcentaje de pies afectados (*)"
             color="#178649"
             suffix="%"
-            :rules="[rules.reglaExtension]">
+            :rules="reglasExtension">
             <v-tooltip top slot="append-outer">
               <template v-slot:activator="{ on }">
                 <v-icon
@@ -175,7 +189,9 @@
 
           <v-text-field
             v-model="informe.contacto"
-            label="Teléfono o correo electrónico"
+            required
+            :rules="reglaObligatorio"
+            label="Teléfono o correo electrónico (*)"
             color="#178649">
             <v-tooltip top slot="append-outer">
               <template v-slot:activator="{ on }">
@@ -192,15 +208,15 @@
 
           <v-divider />
 
-          <br>
-
           <v-btn class="white--text"
             width="100%"
             height="50"
             color="#ff5d55"
-            @click="saveInforme">
+            :disabled="!valid"
+            @click="validar">
             enviar
           </v-btn>
+          
         </v-form>
       </v-container>
     </div>
@@ -223,8 +239,6 @@
 
     data: vm => ({
 
-      selectedFile: null,
-
       informe: {
         id: null,
         patogeno: "",
@@ -235,8 +249,13 @@
         contacto: ""
       },
 
+      valid: false,
+
       // campo plaga/enfermedad
       patogenos: [],
+
+      // campo fotografias
+      selectedFile: null,
 
       // campo fecha
       date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
@@ -254,19 +273,24 @@
         '10-100',
         'Más de 100'
       ],
-      rules: {
-        reglaExtension: value => {
-          const pattern = /^[1-9][0-9]?$|^100$/
-          return pattern.test(value) || 'Introduce un valor numérico entre 1 y 100'
-        }
-      },
 
       // campo severidad del daño
       severidadOpciones: [
         '0-25',
         '25-75',
         'Más del 75'
+      ],
+
+      // reglas
+      reglaObligatorio: [
+        v => !!v || 'Este campo es obligatorio'
+      ],
+
+      reglasExtension: [
+        v => !!v || 'Este campo es obligatorio',
+        v => /^[1-9][0-9]?$|^100$/.test(v) || 'Introduce un valor numérico entre 1 y 100'
       ]
+      
     }),
 
     watch: {
@@ -314,7 +338,7 @@
         return `${day}/${month}/${year}`
       },
 
-      saveInforme() {
+      guardarInforme() {
         var data = {
           patogeno: this.informe.patogeno,
           fecha: this.date,
@@ -330,11 +354,18 @@
           .then((response) => {
             this.informe.id = response.data.id;
             console.log(response.data);
+            this.$router.push('/gracias')
           })
           .catch((e) => {
             console.log(e);
           });
+      },
+
+      validar() {
+        this.$refs.form.validate()
+        this.guardarInforme()
       }
+
     },
 
     mounted() {
@@ -349,6 +380,12 @@
   .direccion {
     font-size: 10px;
     color: #178649
+  }
+
+  .asterisco {
+    text-align: justify;
+    font-size: 12px;
+    color: #686868
   }
 
 </style>
