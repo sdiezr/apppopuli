@@ -74,6 +74,18 @@
                         </div>
                         {{ patogeno.parrafo_como }}
 
+                        <div class="cuerpo">
+                          <v-btn style="margin-top: 30px"
+                            dark
+                            width="100%"
+                            max-width="500px"
+                            height="50"
+                            color="#178649"
+                            @click="show(patogeno.id)">
+                            figura 1
+                          </v-btn>
+                        </div>
+
                         <div class="titulo_patogeno">
                           <br>
                           ¿Qué daños causa?
@@ -137,7 +149,7 @@
         'PLAGAS Y ENFERMEDADES'
       ],
 
-      patogenos: [],
+      patogenos: []
     }),
 
     methods: {
@@ -173,6 +185,23 @@
 
             fileLink.href = fileURL;
             fileLink.setAttribute('download', `${file}.pdf`);
+            document.body.appendChild(fileLink);
+
+            fileLink.click();
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      },
+
+      show(file) {
+        FileService.show(file)
+          .then((response) => {
+            var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+            var fileLink = document.createElement('a');
+
+            fileLink.href = fileURL;
+            fileLink.setAttribute('display', `${file}.jpg`);
             document.body.appendChild(fileLink);
 
             fileLink.click();

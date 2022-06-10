@@ -26,7 +26,7 @@ class FileService {
   show(file) {
     return http.get(`/images/${file}.jpg`, {
       headers: {
-        "Content-Type": "multipart/form-data"
+        "Content-Type": "image/jpg"
       },
       responseType: 'blob' 
     })

@@ -11,7 +11,7 @@
 
     <div class="titulo">
       <img src="../assets/logo.png"
-        width="180" height="144" />
+        width="180" height="144">
     </div>
 
     <div class="cuerpo">
@@ -25,7 +25,7 @@
           enviar informe
         </v-btn>
 
-        <v-divider />
+        <v-divider></v-divider>
 
         <v-btn style="text-decoration: none"
           dark

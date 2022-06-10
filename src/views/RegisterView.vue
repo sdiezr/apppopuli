@@ -20,6 +20,7 @@
           ref="form"
           lazy-validation>
           <v-text-field
+            v-model="user.contact"
             required
             :rules="reglaObligatorio"
             append-outer-icon="mdi-account"
@@ -28,6 +29,7 @@
           </v-text-field>
           
           <v-text-field
+            v-model="user.password"
             required
             :rules="reglaObligatorio"
             :append-outer-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -44,9 +46,15 @@
             height="50"
             color="#178649"
             :disabled="!valid"
-            @click="validar">
+            @click="register">
             registrarse
           </v-btn>
+
+          <br><br>
+
+          <div v-if="message" class="alert alert-danger">
+            {{ message }}
+          </div>
         </v-form>
       </v-container>
     </div>
@@ -56,6 +64,8 @@
 
 <script>
 
+  import User from "../models/user"
+
   export default {
     data() {
       return {
@@ -64,13 +74,50 @@
 
         reglaObligatorio: [
           v => !!v || 'Este campo es obligatorio'
-        ]
+        ],
+
+        user: new User("", ""),
+        message: ""
+      }
+    },
+
+    computed: {
+      loggedIn() {
+        //return this.$store.state.auth.status.loggedIn;
+        return false;
       }
     },
 
     methods: {
-      validar() {
+      register() {
         this.$refs.form.validate()
+        
+        if (this.user.contact && this.user.password) {
+          this.$store.dispatch('auth/register', this.user).then(
+            () => {
+              // al registrar un usuario válido 'loguea' con el automaticamente
+              // y redirecciona a inicio
+              this.$store.dispatch('auth/login', this.user).then(
+                () => {
+                  this.$router.push('/');
+              })
+
+            },
+            error => {
+              this.message =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+            }
+          );
+        }
+
+      }
+    },
+
+    mounted() {
+      if (this.loggedIn) {
+        this.$router.push('/');
       }
     }
   }
