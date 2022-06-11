@@ -1,13 +1,7 @@
 <template>
   <div class="ayuda">
 
-    <div class="icono_usuario">
-      <v-icon
-        large
-        color="#178649">
-        mdi-account-circle
-      </v-icon>
-    </div>
+    <IconoUsuario />
 
     <div class="titulo">
       Ayuda
@@ -138,10 +132,16 @@
 
 <script>
 
-  import PatogenoDataService from "../services/PatogenoDataService.js"
+  import IconoUsuario from "../components/IconoUsuario"
+  import PatogenoDataService from "../services/PatogenoDataService"
   import FileService from "../services/FileService"
 
   export default {
+
+    components: {
+      IconoUsuario
+    },
+
     data: () => ({
       tabModel: 0,
       tabs: [

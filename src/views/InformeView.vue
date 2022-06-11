@@ -1,13 +1,7 @@
 <template>
   <div id="informe">
 
-    <div class="icono_usuario">
-      <v-icon
-        large
-        color="#178649">
-        mdi-account-circle
-      </v-icon>
-    </div>
+    <IconoUsuario />
 
     <div class="titulo">
       Informe
@@ -193,17 +187,6 @@
             :rules="reglaObligatorio"
             label="Teléfono o correo electrónico (*)"
             color="#178649">
-            <v-tooltip top slot="append-outer">
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  v-on="on"
-                  size="20"
-                  color="#178649">
-                  mdi-help
-                </v-icon>
-              </template>
-              <span>si me disculpa</span>
-            </v-tooltip>
           </v-text-field>
 
           <v-divider />
@@ -226,6 +209,7 @@
 
 <script>
 
+  import IconoUsuario from "../components/IconoUsuario"
   import InformeMapa from "../components/InformeMapa"
   import UploadFiles from "../components/UploadFiles"
   import InformeDataService from "../services/InformeDataService"
@@ -233,6 +217,7 @@
 
   export default {
     components: {
+      IconoUsuario,
       InformeMapa,
       UploadFiles
     },
@@ -307,6 +292,10 @@
     },
 
     computed: {
+      currentUser() {
+        return this.$store.state.auth.user;
+      },
+
       computedDateFormatted() {
         return this.formatDate(this.date)
       }

@@ -1,13 +1,7 @@
 <template>
   <v-app>
 
-    <div class="icono_usuario">
-      <v-icon
-        large
-        color="#178649">
-        mdi-account-circle
-      </v-icon>
-    </div>
+    <IconoUsuario />
 
     <div class="titulo">
       <img src="../assets/logo.png"
@@ -28,6 +22,7 @@
         <v-divider></v-divider>
 
         <v-btn style="text-decoration: none"
+          v-if="!currentUser"
           dark
           width="100%"
           height="50"
@@ -35,21 +30,49 @@
           to="/login">
           iniciar sesión
         </v-btn>
+
+        <v-btn
+          v-else
+          dark
+          width="100%"
+          height="50"
+          color="#178649"
+          @click="logout">
+          cerrar sesión
+        </v-btn>
       </v-container>
     </div>
 
   </v-app>
 </template>
 
+<script>
+
+  import IconoUsuario from "../components/IconoUsuario"
+
+  export default {
+    components: {
+      IconoUsuario
+    },
+
+    computed: {
+      currentUser() {
+        return this.$store.state.auth.user;
+      }
+    },
+
+    methods: {
+      logout() {
+        this.$store.dispatch('auth/logout');
+      }
+    }
+  }
+
+</script>
+
 <style>
 
   @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
-
-  .icono_usuario {
-    text-align: left;
-    padding-top: 10px;
-    padding-left: 10px
-  }
 
   .titulo {
     text-align: center;

@@ -1,13 +1,7 @@
 <template>
   <div id="informe">
 
-    <div class="icono_usuario">
-      <v-icon
-        large
-        color="#178649">
-        mdi-account-circle
-      </v-icon>
-    </div>
+    <IconoUsuario />
 
     <div class="titulo">
       Iniciar sesión
@@ -75,9 +69,14 @@
 
 <script>
 
+  import IconoUsuario from "../components/IconoUsuario"
   import User from "../models/user"
 
   export default {
+    components: {
+      IconoUsuario
+    },
+
     data() {
       return {
         valid: false,
@@ -94,8 +93,7 @@
 
     computed: {
       loggedIn() {
-        //return this.$store.state.auth.status.loggedIn;
-        return false;
+        return this.$store.state.auth.status.loggedIn;
       }
     },
 

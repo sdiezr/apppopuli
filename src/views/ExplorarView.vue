@@ -1,13 +1,7 @@
 <template>
   <div class="ayuda">
 
-    <div class="icono_usuario">
-      <v-icon
-        large
-        color="#178649">
-        mdi-account-circle
-      </v-icon>
-    </div>
+    <IconoUsuario />
 
     <div class="titulo">
       Explorar
@@ -109,11 +103,13 @@
 
 <script>
 
+  import IconoUsuario from "../components/IconoUsuario"
   import InformeMapa from "../components/InformeMapa"
-  import InformeDataService from "../services/InformeDataService";
+  import InformeDataService from "../services/InformeDataService"
 
   export default {
     components: {
+      IconoUsuario,
       InformeMapa
     },
 

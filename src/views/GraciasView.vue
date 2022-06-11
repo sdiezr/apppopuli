@@ -1,13 +1,7 @@
 <template>
   <div class="ayuda">
 
-    <div class="icono_usuario">
-      <v-icon
-        large
-        color="#178649">
-        mdi-account-circle
-      </v-icon>
-    </div>
+    <IconoUsuario />
 
     <div class="titulo">
       ¡Gracias!
@@ -43,8 +37,12 @@
 
 <script>
 
+  import IconoUsuario from "../components/IconoUsuario"
+
+  export default {
+    components: {
+      IconoUsuario
+    }
+  }
+
 </script>
-
-<style>
-
-</style>
