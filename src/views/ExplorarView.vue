@@ -83,7 +83,7 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <div style="height: 400px">
-            <InformeMapa />
+            <ExplorarMapa />
           </div>
         </v-card>
     </v-dialog>
@@ -104,13 +104,13 @@
 <script>
 
   import IconoUsuario from "../components/IconoUsuario"
-  import InformeMapa from "../components/InformeMapa"
+  import ExplorarMapa from "../components/ExplorarMapa"
   import InformeDataService from "../services/InformeDataService"
 
   export default {
     components: {
       IconoUsuario,
-      InformeMapa
+      ExplorarMapa
     },
 
     data: () => ({

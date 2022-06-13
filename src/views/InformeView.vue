@@ -19,7 +19,7 @@
         <v-form>
           <v-select
             v-model="informe.patogeno"
-            label="Plaga/Enfermedad"
+            label="Plaga/Enfermedad (si se conoce)"
             color="#178649"
             :items="patogenos"
             item-value="nombre_cientifico"
@@ -30,6 +30,24 @@
             <template v-slot:selection="{item}">
               <i>{{ item.nombre_cientifico }}</i> &nbsp; ({{ item.nombre_vulgar }})
             </template>
+
+            <v-tooltip top slot="append-outer">
+              <template v-slot:activator="{ on }">
+                <router-link to="/ayuda">
+                  <v-icon
+                    v-on="on"
+                    size="20"
+                    color="#178649">
+                    mdi-help
+                  </v-icon>
+                </router-link>
+              </template>
+              <span>
+                Encontrarás más información acerca de plagas y
+                enfermedades que afectan al chopo en el apartado
+                de ayuda.
+              </span>
+            </v-tooltip>
           </v-select>
         </v-form>
 
@@ -332,6 +350,8 @@
           patogeno: this.informe.patogeno,
           fecha: this.date,
           localizacion: this.location.address,
+          lat: this.location.lat,
+          lng: this.location.lng,
           extension_arboles: this.informe.extension_arboles,
           extension_pies: this.informe.extension_pies,
           severidad: this.informe.severidad,
@@ -372,7 +392,7 @@
   }
 
   .asterisco {
-    text-align: justify;
+    text-align: center;
     font-size: 12px;
     color: #686868
   }

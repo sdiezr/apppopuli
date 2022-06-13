@@ -12,7 +12,7 @@
         width="98%"
         max-width="800">
         <v-tabs
-          v-model="tabModel"
+          v-model="activeTab"
           background-color="#178649"
           grow
           dark>
@@ -26,7 +26,7 @@
         </v-tabs>
 
         <v-tabs-items
-          v-model="tabModel">
+          v-model="activeTab">
           <v-tab-item>
             <v-card flat>
               <v-card-text style="text-align: justify">
@@ -143,7 +143,7 @@
     },
 
     data: () => ({
-      tabModel: 0,
+      activeTab: 0,
       tabs: [
         'CÓMO USAR LA APLICACIÓN',
         'PLAGAS Y ENFERMEDADES'

@@ -1,9 +1,8 @@
 <template>
     <l-map
         ref="map"
-        zoom=14
+        zoom=10
         style="z-index: 0"
-        @dblclick="onMapClick"
         :center="[
             position.lat || userLocation.lat || defaultLocation.lat,
             position.lng || userLocation.lng || defaultLocation.lng]">
@@ -12,29 +11,30 @@
             :url="tileProvider.url"
             :attribution="tileProvider.attribution" />
         <l-marker
-            v-if="position.lat && position.lng"
+            v-for="informe in informes"
+            :key="informe"
             visible
-            draggable
             :icon="icon"
-            :lat-lng.sync="position"
-            @dragstart="dragging = true"
-            @dragend="dragging = false">
+            :lat-lng="informe.position">
+            <l-tooltip :content="informe.patogeno" />
         </l-marker>
     </l-map>
 </template>
 
 <script>
 
-    import { LMap, LTileLayer, LMarker } from "vue2-leaflet"
+    import { LMap, LTileLayer, LMarker, LTooltip } from "vue2-leaflet"
     import { OpenStreetMapProvider } from "leaflet-geosearch"
     import LGeosearch from "vue2-leaflet-geosearch"
     import { icon } from "leaflet"
+    import InformeDataService from "../services/InformeDataService"
 
     export default {
         components: {
             LMap,
             LTileLayer,
             LMarker,
+            LTooltip,
             LGeosearch
         },
 
@@ -61,25 +61,29 @@
                     showMarker: false,
                     autoClose: true
                 },
+
                 userLocation: {},
                 icon: icon ({
                     iconUrl: require("leaflet/dist/images/marker-icon.png"),
                     shadowUrl: require("leaflet/dist/images/marker-shadow.png")
                 }),
+
                 position: {},
                 address: "",
-                dragging: false,
                 tileProvider: {
                     attribution:
                     '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                }
+                },
+
+                informes: []
             }
         },
 
         mounted() {
             this.getUserPosition();
-            this.$refs.map.mapObject.on("geosearch/showlocation", this.onSearch)
+            this.$refs.map.mapObject.on("geosearch/showlocation", this.onSearch);
+            this.mostrarInformes();
         },
 
         watch: {
@@ -87,12 +91,7 @@
                 deep: true,
                 async handler(value) {
                     this.address = await this.getAddress();
-                    this.$emit("input", {
-                        position: value,
-                        address: this.address,
-                        lat: this.position.lat,
-                        lng: this.position.lng
-                    });
+                    this.$emit("input", { position: value, address: this.address });
                 }
             }
         },
@@ -121,8 +120,8 @@
                     `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
                     );
                     if (result.status === 200) {
-                    const body = await result.json();
-                    address = body.display_name;
+                        const body = await result.json();
+                        address = body.display_name;
                     }
                 } catch (e) {
                     console.error("Reverse Geocode Error->", e);
@@ -139,7 +138,25 @@
             onSearch(value) {
                 const loc = value.location;
                 this.position = { lat: loc.y, lng: loc.x };
-            }
+            },
+
+            mostrarInformes() {
+                InformeDataService.getAll()
+                .then((response) => {
+                    this.informes = response.data.map(this.getMostrarInforme);
+                    console.log(response.data);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+            },
+
+            getMostrarInforme(informe) {
+                return {
+                    patogeno: informe.patogeno,
+                    position: { lat: informe.lat, lng: informe.lng }
+                };
+            },
         }
     }
 
