@@ -6,11 +6,18 @@
         @dblclick="onMapClick"
         :center="[
             position.lat || userLocation.lat || defaultLocation.lat,
-            position.lng || userLocation.lng || defaultLocation.lng]">
+            position.lng || userLocation.lng || defaultLocation.lng
+        ]">
         <l-geosearch :options="geoSearchOptions" />
         <l-tile-layer
+            v-for="tileProvider in tileProviders"
+            :key="tileProvider.name"
+            :name="tileProvider.name"
+            :visible="tileProvider.visible"
             :url="tileProvider.url"
-            :attribution="tileProvider.attribution" />
+            :attribution="tileProvider.attribution"
+            layer-type="base" />
+        <l-control-layers position="topright" />
         <l-marker
             v-if="position.lat && position.lng"
             visible
@@ -25,7 +32,7 @@
 
 <script>
 
-    import { LMap, LTileLayer, LMarker } from "vue2-leaflet"
+    import { LMap, LTileLayer, LControlLayers, LMarker } from "vue2-leaflet"
     import { OpenStreetMapProvider } from "leaflet-geosearch"
     import LGeosearch from "vue2-leaflet-geosearch"
     import { icon } from "leaflet"
@@ -34,6 +41,7 @@
         components: {
             LMap,
             LTileLayer,
+            LControlLayers,
             LMarker,
             LGeosearch
         },
@@ -58,22 +66,31 @@
                 loading: false,
                 geoSearchOptions: {
                     provider: new OpenStreetMapProvider(),
-                    showMarker: false,
-                    autoClose: true
+                    autoClose: true,
+                    searchLabel: "Buscar una dirección"
                 },
                 userLocation: {},
                 icon: icon ({
                     iconUrl: require("leaflet/dist/images/marker-icon.png"),
-                    shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+                    iconSize: [22,36],
+                    iconAnchor: [11,36]
                 }),
                 position: {},
                 address: "",
-                dragging: false,
-                tileProvider: {
-                    attribution:
-                    '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-                    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                }
+                tileProviders: [
+                    {
+                        name: "Mapa",
+                        visible: true,
+                        attribution: '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                        url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    },
+                    {
+                        name: "Satélite",
+                        visible: false,
+                        attribution: '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                        url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png"
+                    }
+                ]
             }
         },
 

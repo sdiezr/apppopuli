@@ -6,6 +6,10 @@ class PatogenoDataService {
     return http.get("/patogenos");
   }
 
+  get(id_sintoma) {
+    return http.get(`/patogenos/${id_sintoma}`);
+  }
+
 }
 
 export default new PatogenoDataService();

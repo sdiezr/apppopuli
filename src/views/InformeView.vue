@@ -19,6 +19,7 @@
         <v-form>
           <v-select
             v-model="informe.patogeno"
+            clearable
             label="Plaga/Enfermedad (si se conoce)"
             color="#178649"
             :items="patogenos"

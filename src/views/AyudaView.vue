@@ -40,6 +40,21 @@
               width="98%"
               flat>
 
+              <v-card style="padding-top: 10px" class="mx-auto"
+                width="90%"
+                flat>
+                <v-select
+                  v-model="selectedSintoma"
+                  clearable
+                  label="Filtrar por síntomas"
+                  color="#178649"
+                  :items="sintomas"
+                  :item-text="'descripcion'"
+                  :item-value="'id'"
+                  @input="filtrarPatogenos">
+                </v-select>
+              </v-card>
+
               <v-list>
                 <v-list-group
                   v-for="patogeno in patogenos"
@@ -134,6 +149,7 @@
 
   import IconoUsuario from "../components/IconoUsuario"
   import PatogenoDataService from "../services/PatogenoDataService"
+  import SintomaDataService from "../services/SintomaDataService"
   import FileService from "../services/FileService"
 
   export default {
@@ -149,19 +165,38 @@
         'PLAGAS Y ENFERMEDADES'
       ],
 
-      patogenos: []
+      patogenos: [],
+      sintomas: []
     }),
 
     methods: {
       mostrarPatogenos() {
         PatogenoDataService.getAll()
           .then((response) => {
-            this.patogenos = response.data.map(this.getMostrarPatogeno);
+            this.patogenos = response.data;
             console.log(response.data);
           })
           .catch((e) => {
             console.log(e);
           });
+      },
+
+      filtrarPatogenos() {
+        if (this.selectedSintoma == null) {
+          // si se limpia la entrada de v-select busca patogenos cuyo
+          // id_sintoma sea null, entonces llamo al metodo mostrarPatogenos
+          // que muestra todos
+          this.mostrarPatogenos();
+        } else {
+          PatogenoDataService.get(this.selectedSintoma)
+            .then((response) => {
+              this.patogenos = response.data;
+              console.log(response.data);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
       },
 
       getMostrarPatogeno(patogeno) {
@@ -174,6 +209,24 @@
           parrafo_que: patogeno.parrafo_que,
           parrafo_cuando: patogeno.parrafo_cuando,
           parrafo_confundir: patogeno.parrafo_confundir
+        };
+      },
+
+      mostrarSintomas() {
+        SintomaDataService.getAll()
+          .then((response) => {
+            this.sintomas = response.data;
+            console.log(response.data);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      },
+
+      getMostrarSintoma(sintoma) {
+        return {
+          id: sintoma.id,
+          descripcion: sintoma.descripcion
         };
       },
 
@@ -215,6 +268,7 @@
 
     mounted() {
       this.mostrarPatogenos();
+      this.mostrarSintomas();
     }
   }
 
